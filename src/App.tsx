@@ -11,7 +11,7 @@ import type { AppRouter } from "../worker/trpc";
 const trpc = createTRPCClient<AppRouter>({
   links: [
     httpBatchLink({
-      url: "http://localhost:5173/api/trpc", // Adjust the URL to match your worker's endpoint
+      url: "/api/trpc", // Adjust the URL to match your worker's endpoint
     }),
   ],
 });

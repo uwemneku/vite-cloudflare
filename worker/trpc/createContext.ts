@@ -1,3 +1,4 @@
+import "../../worker-configuration.d.ts";
 interface Args {
   request: Request<unknown, IncomingRequestCfProperties<unknown>>;
   env: Env;
