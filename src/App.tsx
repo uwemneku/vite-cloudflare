@@ -5,7 +5,7 @@ import useGetAllTodoQuery, {
 } from "./services/api/useGetTodo";
 
 function App() {
-  const { data, error } = useGetAllTodoQuery();
+  const { data } = useGetAllTodoQuery();
   const { mutate } = useCreateTodo();
   const { mutate: deleteTodo } = useDeleteTodo();
   const inputRef = useRef<HTMLInputElement>(null);
