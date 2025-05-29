@@ -2,16 +2,13 @@ import { sql } from "drizzle-orm";
 import { sqliteTable, int, text } from "drizzle-orm/sqlite-core";
 
 export const TodoTable = sqliteTable("todos_table", {
-  id: int().primaryKey({ autoIncrement: true }),
-  title: text({ mode: "text" }).notNull(),
-  createdAt: int({ mode: "timestamp" })
-    .$defaultFn(() => new Date())
+  id: int("id").primaryKey({ autoIncrement: true }),
+  title: text("title", { mode: "text" }).notNull(),
+  createdAt: int("createdAt", { mode: "timestamp" })
     .notNull()
-    .default(sql`(current_timestamp)`),
-  updatedAt: int({ mode: "timestamp" })
-    .$onUpdateFn(() => new Date())
-    .$defaultFn(() => new Date())
+    .default(sql`(unixepoch())`),
+  updatedAt: int("updatedAt", { mode: "timestamp" })
     .notNull()
-    .default(sql`(current_timestamp)`),
-  isDone: int({ mode: "boolean" }).notNull().default(false),
+    .default(sql`(unixepoch())`),
+  isDone: int("isDone", { mode: "boolean" }).notNull().default(false),
 });

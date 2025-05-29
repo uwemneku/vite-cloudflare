@@ -7,7 +7,8 @@ import { eq } from "drizzle-orm";
 export const t = initTRPC.context<Context>().create();
 export const appRouter = t.router({
   getTodos: t.procedure.query(async ({ ctx }) => {
-    const todos = await ctx.db.query.TodoTable.findMany();
+    const todos = await ctx.db.select().from(TodoTable);
+    console.log("Todos fetched:", todos);
     return { todos };
   }),
   createTodo: t.procedure
