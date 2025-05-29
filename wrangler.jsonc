@@ -29,7 +29,8 @@
     {
       "binding": "DB",
       "database_name": "todoaPP",
-      "database_id": "c6a64861-2355-4d1b-a8f0-de0e6df0a101"
+      "database_id": "c6a64861-2355-4d1b-a8f0-de0e6df0a101",
+      "migrations_dir": "drizzle/migrations"
     }
   ]
 

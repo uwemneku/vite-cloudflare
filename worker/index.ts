@@ -2,6 +2,10 @@ import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import { appRouter } from "./trpc";
 import createContext from "./trpc/createContext";
 
+export type Env = {
+  DB: D1Database;
+};
+
 export default {
   fetch(request, env, ctx) {
     const url = new URL(request.url);

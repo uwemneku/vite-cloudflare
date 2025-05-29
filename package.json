@@ -1,37 +1,51 @@
 {
-	"name": "vite-cloudflare",
-	"private": true,
-	"version": "0.0.0",
-	"type": "module",
-	"scripts": {
-		"dev": "vite",
-		"build": "tsc -b && vite build",
-		"lint": "eslint .",
-		"preview": "pnpm run build && vite preview",
-		"deploy": "pnpm run build && wrangler deploy",
-		"cf-typegen": "wrangler types"
-	},
-	"dependencies": {
-		"@tailwindcss/vite": "^4.1.7",
-		"@trpc/client": "^11.1.2",
-		"@trpc/server": "^11.1.2",
-		"react": "^19.1.0",
-		"react-dom": "^19.1.0",
-		"tailwindcss": "^4.1.7"
-	},
-	"devDependencies": {
-		"@cloudflare/vite-plugin": "^1.2.4",
-		"@eslint/js": "^9.25.0",
-		"@types/react": "^19.1.2",
-		"@types/react-dom": "^19.1.2",
-		"@vitejs/plugin-react": "^4.4.1",
-		"eslint": "^9.25.0",
-		"eslint-plugin-react-hooks": "^5.2.0",
-		"eslint-plugin-react-refresh": "^0.4.19",
-		"globals": "^16.0.0",
-		"typescript": "~5.8.3",
-		"typescript-eslint": "^8.30.1",
-		"vite": "^6.3.5",
-		"wrangler": "^4.16.1"
-	}
+  "name": "vite-cloudflare",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "pnpm run build && vite preview",
+    "deploy": "pnpm run build && wrangler deploy",
+    "cf-typegen": "wrangler types",
+    "db:generate": "drizzle-kit generate",
+    "db:up": "drizzle-kit up",
+    "db:push": "drizzle-kit push",
+    "execute:D1:db": "wrangler d1 execute todoaPP --local --file "
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.7",
+    "@tanstack/react-query": "^5.79.0",
+    "@trpc/client": "^11.1.2",
+    "@trpc/server": "^11.1.2",
+    "@trpc/tanstack-react-query": "^11.1.4",
+    "dotenv": "^16.5.0",
+    "drizzle-orm": "^0.43.1",
+    "mysql2": "^3.14.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tailwindcss": "^4.1.7",
+    "zod": "^3.25.36"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.2.4",
+    "@eslint/js": "^9.25.0",
+    "@tanstack/eslint-plugin-query": "^5.78.0",
+    "@types/node": "^22.15.24",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^4.4.1",
+    "drizzle-kit": "^0.31.1",
+    "eslint": "^9.25.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^16.0.0",
+    "tsx": "^4.19.4",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.30.1",
+    "vite": "^6.3.5",
+    "wrangler": "^4.16.1"
+  }
 }

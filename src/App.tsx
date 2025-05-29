@@ -1,72 +1,54 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import cloudflareLogo from "./assets/Cloudflare_Logo.svg";
-import "./App.css";
-import { createTRPCClient, httpBatchLink } from "@trpc/client";
-import type { AppRouter } from "../worker/trpc";
-
-// Pass AppRouter as generic here. 👇 This lets the `trpc` object know
-// what procedures are available on the server and their input/output types.
-const trpc = createTRPCClient<AppRouter>({
-  links: [
-    httpBatchLink({
-      url: "/api/trpc", // Adjust the URL to match your worker's endpoint
-    }),
-  ],
-});
+import { useRef } from "react";
+import useGetAllTodoQuery, {
+  useCreateTodo,
+  useDeleteTodo,
+} from "./services/api/useGetTodo";
 
 function App() {
-  const [count, setCount] = useState(0);
-  const [name, setName] = useState("unknown");
+  const { data, error } = useGetAllTodoQuery();
+  const { mutate } = useCreateTodo();
+  const { mutate: deleteTodo } = useDeleteTodo();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   return (
     <>
-      <div className="bg-white ">
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-        <a href="https://workers.cloudflare.com/" target="_blank">
-          <img
-            src={cloudflareLogo}
-            className="logo cloudflare"
-            alt="Cloudflare logo"
+      <main className="bg-black w-screen h-screen flex  items-center flex-col overflow-y-auto py-20">
+        <div className="h-[40dvh]"></div>
+        <div className="flex items-center">
+          <input
+            ref={inputRef}
+            type="text"
+            className="p-3 bg-white rounded-full text-black"
           />
-        </a>
-      </div>
-      <h1>Vite + React + Cloudflare</h1>
-      <div className="card">
-        <button
-          onClick={() => setCount((count) => count + 1)}
-          aria-label="increment"
-        >
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <div className="card">
-        <button
-          onClick={() => {
-            trpc.getName.query().then((data) => {
-              setName(data.name);
-            });
-          }}
-          aria-label="get name"
-        >
-          Name from API is: {name}
-        </button>
-        <p>
-          Edit <code>worker/index.ts</code> to change the name
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+          <button
+            className="bg-white  text-lg font-extrabold rounded-full w-10 h-10 flex justify-center items-center ml-2"
+            onClick={() => {
+              if (inputRef.current?.value) {
+                mutate({ title: inputRef.current.value });
+                inputRef.current.value = "";
+              }
+            }}
+          >
+            +
+          </button>
+        </div>
+        {/* =========== Todo's ============== */}
+        <div>
+          {data?.todos.map((todo) => (
+            <div
+              key={todo.id}
+              className="bg-white p-3 rounded-lg mt-2 flex justify-between items-center "
+              onClick={() => deleteTodo(todo.id)}
+            >
+              <span>{todo.title}</span>
+              <span className="text-gray-500">
+                {new Date(todo.createdAt).toLocaleDateString()}
+              </span>
+            </div>
+          ))}
+        </div>
+        {/* =========== ====== ============== */}
+      </main>
     </>
   );
 }
