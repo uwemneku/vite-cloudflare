@@ -13,7 +13,8 @@
     "db:generate": "drizzle-kit generate",
     "db:up": "drizzle-kit up",
     "db:push": "drizzle-kit push",
-    "db:migrate:local": "pnpm wrangler d1 migrations apply todoaPP --local"
+    "db:migrate:local": "pnpm wrangler d1 migrations apply todoaPP --local",
+    "db:migrate:remote": "pnpm wrangler d1 migrations apply todoaPP --remote"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.7",
