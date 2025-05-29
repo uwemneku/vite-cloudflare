@@ -34,3 +34,12 @@
     pnpm dev
   ```
 
+  ## Github Action
+  For the github action to work, you need to create the following secretes in your repo
+  - CLOUDFLARE_API_TOKEN
+  - CLOUDFLARE_ACCOUNT_ID
+  <br />
+  [Cloudlfare docs](https://developers.cloudflare.com/workers/ci-cd/external-cicd/github-actions/#api-token)
+
+  **The github action automatically applies db migrations to the production db. Not so sure this is a good idea.
+
