@@ -30,11 +30,8 @@ jobs:
       - name: install dependencies
         run: pnpm install
 
-      - name: install dependencies
-        run: pnpm run deploy
+      - name: Apply migrations
+        run: pnpm run db:migrate:remote
 
-      - name: Build & Deploy Worker
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Deploy App
+        run: pnpm run deploy
