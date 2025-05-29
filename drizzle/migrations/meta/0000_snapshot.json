@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "7cea6d3c-acf8-4e5a-9b28-16b2d8ee1298",
+  "id": "f17415ba-a1de-4ffa-89d8-11640dbbe832",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "todos_table": {
@@ -14,23 +14,39 @@
           "notNull": true,
           "autoincrement": true
         },
-        "sample": {
-          "name": "sample",
+        "title": {
+          "name": "title",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(current_timestamp)"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(current_timestamp)"
+        },
+        "isDone": {
+          "name": "isDone",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
         }
       },
-      "indexes": {
-        "todos_table_sample_unique": {
-          "name": "todos_table_sample_unique",
-          "columns": [
-            "sample"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},

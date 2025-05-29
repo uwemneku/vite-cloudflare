@@ -22,15 +22,12 @@
   ```bash
     pnpx wrangler@latest d1 create todoaPP
   ```
-- Create the database schema migration
-  ```bash
-    pnpm run db:generate
-  ```
+
 - Apply migrations to local D1 database
   <br>
   Replace `file-path` with the sql file found at `drizzle/migrations/********/sql`
   ```bash
-    pnpm execute:D1:db "file-path"
+    pnpm db:migrate:local
   ```
 - Start the app
   ```bash

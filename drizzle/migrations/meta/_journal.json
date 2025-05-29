@@ -5,57 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1748501943899,
-      "tag": "0000_lyrical_landau",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1748503088223,
-      "tag": "0001_fancy_proudstar",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1748507164718,
-      "tag": "0002_melted_mephisto",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1748507364762,
-      "tag": "0003_even_callisto",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "6",
-      "when": 1748507374631,
-      "tag": "0004_lumpy_zemo",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "6",
-      "when": 1748507380880,
-      "tag": "0005_adorable_stature",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "6",
-      "when": 1748507383023,
-      "tag": "0006_fluffy_mach_iv",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "6",
-      "when": 1748508350047,
-      "tag": "0007_swift_strong_guy",
+      "when": 1748521057019,
+      "tag": "0000_spicy_supreme_intelligence",
       "breakpoints": true
     }
   ]
