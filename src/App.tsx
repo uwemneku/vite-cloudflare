@@ -1,13 +1,10 @@
 import { useRef } from "react";
-import useGetAllTodoQuery, {
-  useCreateTodo,
-  useDeleteTodo,
-} from "./services/api/useGetTodo";
+import useGetAllTodoQuery, { useCreateTodo } from "./services/api/useGetTodo";
+import Task from "./components/todo";
 
 function App() {
   const { data } = useGetAllTodoQuery();
   const { mutate } = useCreateTodo();
-  const { mutate: deleteTodo } = useDeleteTodo();
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
@@ -35,16 +32,14 @@ function App() {
         {/* =========== Todo's ============== */}
         <div className="min-w-[300px] w-[400px] mt-4">
           {data?.todos.map((todo) => (
-            <div
+            <Task
+              createdAt={todo.createdAt}
+              title={todo.title}
+              id={todo.id}
               key={todo.id}
-              className="bg-white p-3 rounded-lg mt-2 flex justify-between items-center "
-              onClick={() => deleteTodo(todo.id)}
-            >
-              <span>{todo.title}</span>
-              <span className="text-gray-500">
-                {new Date(todo.createdAt).toLocaleDateString()}
-              </span>
-            </div>
+              isDone={todo.isDone}
+              updatedAt={todo.updatedAt}
+            />
           ))}
         </div>
         {/* =========== ====== ============== */}
@@ -52,5 +47,4 @@ function App() {
     </>
   );
 }
-
 export default App;
