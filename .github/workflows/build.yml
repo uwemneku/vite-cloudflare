@@ -26,7 +26,7 @@ jobs:
         run: pnpm install
 
       - name: install dependencies
-        run: pnpm deploy
+        run: pnpm run deploy
 
       - name: Build & Deploy Worker
         uses: cloudflare/wrangler-action@v3
