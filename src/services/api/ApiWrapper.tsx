@@ -1,7 +1,13 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState, type PropsWithChildren } from "react";
 import type { AppRouter } from "../../../worker/trpc";
-import { createTRPCClient, httpBatchLink } from "@trpc/client";
+import {
+  createTRPCClient,
+  httpBatchLink,
+  httpSubscriptionLink,
+  loggerLink,
+  splitLink,
+} from "@trpc/client";
 import { TRPCProvider } from "../../util/trpc";
 
 function makeQueryClient() {
@@ -34,8 +40,15 @@ export default function ApiWrapper(props: PropsWithChildren) {
   const [trpcClient] = useState(() =>
     createTRPCClient<AppRouter>({
       links: [
-        httpBatchLink({
-          url: "/api/trpc",
+        loggerLink(),
+        splitLink({
+          condition: (op) => op.type === "subscription",
+          true: httpSubscriptionLink({
+            url: "/api/trpc",
+          }),
+          false: httpBatchLink({
+            url: "/api/trpc",
+          }),
         }),
       ],
     })

@@ -7,6 +7,7 @@
   "name": "vite-cloudflare",
   "main": "worker/index.ts",
   "compatibility_date": "2025-05-25",
+  "compatibility_flags": ["nodejs_compat"],
   "assets": {
     "not_found_handling": "single-page-application"
   },
@@ -32,7 +33,10 @@
       "database_id": "c6a64861-2355-4d1b-a8f0-de0e6df0a101",
       "migrations_dir": "drizzle/migrations"
     }
-  ]
+  ],
+  "ai": {
+    "binding": "AI"
+  }
 
   /**
    * Environment Variables

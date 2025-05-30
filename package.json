@@ -17,19 +17,25 @@
     "db:migrate:remote": "pnpm wrangler d1 migrations apply todoaPP --remote"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^1.3.22",
     "@tailwindcss/vite": "^4.1.7",
     "@tanstack/react-query": "^5.79.0",
     "@trpc/client": "^11.1.2",
     "@trpc/server": "^11.1.2",
     "@trpc/tanstack-react-query": "^11.1.4",
+    "ai": "^4.3.16",
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.43.1",
+    "motion": "^12.15.0",
     "mysql2": "^3.14.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-icons": "^5.5.0",
+    "react-markdown": "^10.1.0",
     "react-router": "^7.6.1",
     "tailwindcss": "^4.1.7",
+    "uuid": "^11.1.0",
+    "workers-ai-provider": "^0.5.3",
     "zod": "^3.25.36"
   },
   "devDependencies": {
