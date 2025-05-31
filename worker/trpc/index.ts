@@ -5,8 +5,10 @@ import { TodoTable } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { streamText, tool } from "ai";
 import { v4 } from "uuid";
-import { openai } from "@ai-sdk/openai";
+// import { openai } from "@ai-sdk/openai";
+import OpenAI from "openai";
 export const t = initTRPC.context<Context>().create();
+const openAi = new OpenAI({});
 
 export const appRouter = t.router({
   getTodos: t.procedure.query(async ({ ctx }) => {
@@ -31,40 +33,45 @@ export const appRouter = t.router({
     return { deletedTodo };
   }),
   chat: t.procedure
-    .input(z.object({ message: z.string(), id: z.string() }))
-    .subscription(async function* ({ ctx, input }) {
-      const res = streamText({
-        model: openai("gpt-3.5-turbo"),
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are an AI assistant that helps users create Todo lists. Do not deviate from this",
-          },
+    .input(
+      z.object({
+        message: z.string(),
+        prevMessageId: z.string().optional(),
+      })
+    )
+    .subscription(async function* ({ input }) {
+      const stream = await openAi.responses.create({
+        model: "chatgpt-4o-latest",
+        input: [
           {
             role: "user",
             content: input.message,
           },
         ],
-        tools: {
-          createTodo: tool({
-            description: "Create a Todo task",
-            parameters: z.object({
-              title: z.string().describe("The title to the task to be created"),
-            }),
-            execute: async () => {},
-            type: "function",
-          }),
-        },
-        onError(err) {
-          console.log("errororor", err);
-        },
+        stream: true,
       });
 
-      for await (const text of res.textStream) {
-        yield tracked(v4(), { text, id: input.id });
+      for await (const data of stream) {
+        switch (data.type) {
+          case "response.output_text.delta":
+            {
+              yield tracked(v4(), {
+                text: data.delta,
+                type: "message",
+              } as const);
+            }
+            break;
+          case "response.completed": {
+            yield tracked(v4(), {
+              responseId: data.response.id,
+              type: "end",
+            } as const);
+          }
+        }
+        yield { data, type: "dd" } as const;
       }
-      return;
+
+      // return;
     }),
 });
 export type AppRouter = typeof appRouter;

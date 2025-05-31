@@ -17,7 +17,11 @@ interface ChatReducerActions {
 const chatReducer = (
   state: {
     messageIdOrder: string[];
-    messages: Record<string, { userText: string; assistantResponse: string[] }>;
+    messages: {
+      [key: string]:
+        | { role: "user"; message: string }
+        | { role: "assistant"; message: string[] };
+    };
   },
   action: {
     [key in keyof ChatReducerActions]: {
@@ -34,27 +38,32 @@ const chatReducer = (
         messages: {
           ...state.messages,
           [action.payload.id]: {
-            userText: action.payload.message,
-            assistantResponse: [],
+            message: action.payload.message,
+            role: "user",
           },
         },
       };
     }
     case "addAssistantMessage": {
+      const isMessageInId = state.messageIdOrder.includes(action.payload.id);
       return {
-        ...state,
+        messageIdOrder: [
+          ...state.messageIdOrder,
+          ...(!isMessageInId ? [action.payload.id] : []),
+        ],
         messages: {
           ...state.messages,
           [action.payload.id]: {
-            ...state.messages[action.payload.id],
-            assistantResponse: [
-              ...state.messages[action.payload.id].assistantResponse,
+            role: "assistant",
+            message: [
+              ...(state.messages[action.payload.id]?.message || []),
               action.payload.message,
             ],
           },
         },
       };
     }
+
     default:
       action satisfies never;
   }
@@ -63,26 +72,43 @@ const chatReducer = (
 export default function LlmChat() {
   const textRef = useRef<HTMLParagraphElement>(null);
   const trpcClient = useTRPCClient();
-  //   const [data, setData] = useState<{ id: string; text: string }[]>([]);
   const textContentRef = useRef<HTMLDivElement>(null);
   const [chats, dispatch] = useReducer(chatReducer, {
     messages: {},
     messageIdOrder: [],
   });
+  const responseIdRef = useRef<string | null>(null);
 
-  const sendMessage = (message: string, id: string) => {
+  const sendMessage = (message: string) => {
+    const id = v4();
     const subscription = trpcClient.chat.subscribe(
-      { message, id },
+      { message, prevMessageId: responseIdRef.current || "" },
       {
         onData(value) {
-          dispatch({
-            action: "addAssistantMessage",
-            payload: { id: value.data.id, message: value.data.text },
-          });
+          switch (value.data.type) {
+            case "message":
+              {
+                dispatch({
+                  action: "addAssistantMessage",
+                  payload: { id, message: value.data.text },
+                });
+              }
+              break;
+            case "end":
+              {
+                responseIdRef.current = value.data.responseId;
+                console.log(
+                  "Response finished with ID:",
+                  value.data.responseId
+                );
+              }
+              break;
+            default: {
+              console.log("Unknown data type received:", value.data);
+            }
+          }
         },
-        onStarted(opts) {
-          dispatch({ action: "addUserMessage", payload: { id, message } });
-        },
+        onStarted() {},
         onComplete() {
           subscription.unsubscribe();
         },
@@ -111,16 +137,18 @@ export default function LlmChat() {
           ref={textContentRef}
         >
           {chats.messageIdOrder.map((id) => {
-            const { assistantResponse = [], userText = "" } =
-              chats.messages?.[id] || {};
+            const details = chats.messages?.[id];
             return (
               <Fragment key={id}>
-                <p className="p-3 rounded-md bg-gray-700 self-end">
-                  {userText}
-                </p>
-                <div className="self-start">
-                  <Markdown>{assistantResponse.join(" ")}</Markdown>
-                </div>
+                {details.role === "user" ? (
+                  <p className="p-3 py-2 rounded-md bg-gray-700 self-end">
+                    {details.message}
+                  </p>
+                ) : (
+                  <div className="self-start">
+                    <Markdown>{details.message?.join("")}</Markdown>
+                  </div>
+                )}
               </Fragment>
             );
           })}
@@ -135,8 +163,12 @@ export default function LlmChat() {
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();
               if (textRef.current?.textContent) {
-                const messageId = v4();
-                sendMessage(textRef.current.textContent, messageId);
+                dispatch({
+                  action: "addUserMessage",
+                  payload: { id: v4(), message: textRef.current.textContent },
+                });
+
+                sendMessage(textRef.current.textContent);
                 textRef.current.textContent = "";
               }
             }

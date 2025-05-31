@@ -6,7 +6,11 @@ export default function Task(props: Task) {
   const { mutate, isPending, isSuccess } = useDeleteTodo();
 
   return (
-    <div key={props.id} className="bg-white p-3 rounded-lg flex items-center ">
+    <div
+      draggable
+      key={props.id}
+      className="bg-white p-3 rounded-lg flex items-center "
+    >
       <div className="flex-1 justify-between flex items-center">
         <span>{props.title}</span>
         <span className="text-gray-500">
